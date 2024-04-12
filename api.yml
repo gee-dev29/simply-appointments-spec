@@ -19,7 +19,113 @@ paths:
         responses:
           '201':
             description: User created
-            content:
-              application/json:
+          '400':
+            description: Bad request
+    /user/login:
+       post:
+        description: Login user
+        requestBody:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                  password:
+                    type: string
+        responses:
+          '200':
+            description: Login successful
+            headers:
+              X-Authorization:
                 schema:
-                  $ref: '#/components/schemas/User'
+                  type: string
+          '404':
+            $ref: '#/components/responses/NotFound'
+  
+    
+
+            
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+     BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetail'
+     Notauthorized:
+      description: Access token can't access the resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetail'
+     NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetail'
+     Conflict:
+      description: The specified resource has as a conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetail'
+     RateLimited:
+        description: The resource is rate limited
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProblemDetail'
+     NotAuthenticated:
+        description: access token is missing or invalid
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProblemDetail'
+  schemas:
+    ProblemDetail:
+      type: object
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: number
+        detail:
+          type: string
+      
+    User:
+      type: object
+      properties:
+        id:
+          type: string 
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        phoneNumber:
+          type: number
+        address:
+          type: string
+        userType:
+          type: string
+          enum:
+            - customer
+            - staff
+            - admin
+      required:
+        - name
+        - email
+        - password
+    
