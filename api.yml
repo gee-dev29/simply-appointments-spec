@@ -333,7 +333,19 @@ paths:
                 $ref: '#/components/responses/NotFound'
               '403':
                 $ref: '#/components/responses/NotAuthorized'
-          
+
+    /services:
+        get:
+          description: Get list of services
+          responses:
+            '200':
+              description: List of services
+              content:
+                application/json:
+                  schema:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Service'
         
 
       
@@ -511,4 +523,23 @@ components:
              - paid
              - completed
              - rejected
+    
+    Service:
+       type: object
+       properties:
+         id:
+           type: string
+         name:
+           type: string
+         price:
+           type: number
+         description:
+           type: string
+           nullable: true
+         duration:
+           type: string
+           nullable: true
+       required:
+         - name
+         - price
     
