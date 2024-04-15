@@ -337,6 +337,9 @@ paths:
     /services:
         get:
           description: Get list of services
+          operationId: getServices
+          security:
+            - bearerAuth: []
           responses:
             '200':
               description: List of services
@@ -346,16 +349,61 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Service'
-        
+            '404':
+              $ref: '#/components/responses/NotFound'
+
+    /services/{serviceid}:
+          parameters:
+            - $ref: '#/components/parameters/ServiceIdParam'
+          get:
+            description: Get service
+            operationId: getService
+            security:
+              - bearerAuth: []
+            responses:
+              '200':
+                description: Service
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/Service'
+              '404':
+                $ref: '#/components/responses/NotFound'
+              '403':
+                $ref: '#/components/responses/NotAuthorized'
+
+          post:
+              description: Create service
+              operationId: createService
+              security:
+                - bearerAuth: []
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/Service'
+              responses:
+                '201':
+                  description: Service created
+                '409':
+                   $ref: '#/components/responses/BadRequest'
+                '403':
+                   $ref: '#/components/responses/NotAuthorized'
+          delete:
+                description: Delete service
+                operationId: deleteService
+                security:
+                  - bearerAuth: []
+                responses:
+                  '200':
+                    description: OK
+                  '404':
+                    $ref: '#/components/responses/NotFound'
+                  '403':
+                    $ref: '#/components/responses/NotAuthorized'
 
       
-         
-
-
-  
-    
-
-            
+        
 components:
   securitySchemes:
     bearerAuth:
@@ -419,6 +467,14 @@ components:
 
      AppointmentIdParam:
         name: appointmentId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+
+     ServiceIdParam:
+        name: serviceId
         in: path
         required: true
         schema:
