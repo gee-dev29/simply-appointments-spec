@@ -512,6 +512,23 @@ paths:
                     $ref: '#/components/responses/NotFound'
                   '403':
                     $ref: '#/components/responses/NotAuthorized'
+          patch:
+                description: Update service
+                operationId: updateService
+                security:
+                  - bearerAuth: []
+                requestBody:
+                  content:
+                    application/json:
+                      schema:
+                        $ref: '#/components/schemas/Service'
+                responses:
+                  '200':
+                    description: OK
+                  '404':
+                    $ref: '#/components/responses/NotFound'
+                  '403':
+                    $ref: '#/components/responses/NotAuthorized'
 
     /staff/{staffid}/appointment:
         get:
@@ -532,8 +549,7 @@ paths:
               $ref: '#/components/responses/NotFound'
             '403':
               $ref: '#/components/responses/NotAuthorized'
-
-  
+                
     /staff/{staffid}/appointment/{appointmentid}:
             patch:
               description: change appointment status
