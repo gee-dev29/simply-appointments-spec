@@ -7,35 +7,6 @@ servers:
   - url: http://api.simplyappointments.com/v1
   
 paths:
-    /users:
-      post:
-        description: Create user
-        operationId: createUser
-        requestBody:
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        responses:
-          '201':
-            description: User created
-          '400':
-            description: Bad request
-      get:
-        description: Get list of users
-        responses:
-          '200':
-            description: List of users
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/User'
-          '404':
-              $ref: '#/components/responses/NotFound'
-
     /users/login:
        post:
         description: Login user
@@ -104,6 +75,93 @@ paths:
             '404':
               $ref: '#/components/responses/NotFound'
 
+    /user/customer:
+         post:
+           description: Register a new customer
+           operationId: registerCustomer
+           requestBody:
+               content:
+                  application/json:
+                     schema:
+                       $ref: '#/components/schemas/User'
+           responses:
+             '201':
+               description: customer resgistered successfully
+             '400':
+                $ref: '#/components/responses/BadRequest'
+             '409' : 
+                $ref: '#/components/responses/Conflict'
+         get: 
+              description: Get list of customers
+              operationId: getCustomers
+              security:
+                - bearerAuth: []
+              responses:
+                '200':
+                  description: List of customers
+                  content:
+                    application/json:
+                      schema:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+                '404':
+                  $ref: '#/components/responses/NotFound'
+                '403':
+                  $ref: '#/components/responses/NotAuthorized'
+
+    /user/staff:
+         post:
+           description: Register a new staff
+           operationId: registerStaff
+           requestBody:
+               content:
+                  application/json:
+                     schema:
+                       $ref: '#/components/schemas/User'
+           responses:
+             '201':
+               description: staff resgistered successfully
+             '400':
+                $ref: '#/components/responses/BadRequest'
+             '409' : 
+                $ref: '#/components/responses/Conflict'
+         get:
+              description: Get list of staffs
+              operationId: getStaffs
+              security:
+                - bearerAuth: []
+              responses:
+                '200':
+                  description: List of staffs
+                  content:
+                    application/json:
+                      schema:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+                '404':
+                  $ref: '#/components/responses/NotFound'
+                '403':
+                  $ref: '#/components/responses/NotAuthorized'
+
+    /users/admin:
+         post:
+           description: Register a new admin
+           operationId: registerAdmin
+           requestBody:
+               content:
+                  application/json:
+                     schema:
+                       $ref: '#/components/schemas/User'
+           responses:
+             '201':
+               description: admin resgistered successfully
+             '400':
+                $ref: '#/components/responses/BadRequest'
+             '409' : 
+                $ref: '#/components/responses/Conflict'
+
     /users/{userId}:
           parameters:
             - $ref: '#/components/parameters/UserIdParam'
@@ -135,6 +193,20 @@ paths:
                 application/json:
                   schema:
                     $ref: '#/components/schemas/User'
+            responses:
+              '200':
+                description: OK
+              '404':
+                $ref: '#/components/responses/NotFound'
+              '403':
+                $ref: '#/components/responses/NotAuthorized'
+              '409' : 
+                $ref: '#/components/responses/Conflict'
+          delete:
+            description: Delete user
+            operationId: deleteUser
+            security:
+              - bearerAuth: []
             responses:
               '200':
                 description: OK
@@ -293,6 +365,45 @@ paths:
                 $ref: '#/components/responses/NotAuthorized'
               '409' : 
                 $ref: '#/components/responses/Conflict'
+
+    /staffs:
+        get:
+          description: Get list of staffs
+          operationId: getStaffs
+          security:
+            - bearerAuth: []
+          responses:
+            '200':
+              description: List of staffs
+              content:
+                application/json:
+                  schema:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+            '404':
+              $ref: '#/components/responses/NotFound'
+            '403':
+              $ref: '#/components/responses/NotAuthorized'
+        post:
+            description: Create staff
+            operationId: createStaff
+            security:
+              - bearerAuth: []
+            requestBody:
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/User'
+            responses:
+              '201':
+                description: OK
+              '404':
+                $ref: '#/components/responses/NotFound'
+              '403':
+                $ref: '#/components/responses/NotAuthorized'
+              '409':
+                $ref: '#/components/responses/Conflict'
     
     /appointments:
         parameters:
@@ -333,17 +444,126 @@ paths:
                 $ref: '#/components/responses/NotFound'
               '403':
                 $ref: '#/components/responses/NotAuthorized'
-          
-        
 
-      
-         
+    /services:
+        get:
+          description: Get list of services
+          operationId: getServices
+          security:
+            - bearerAuth: []
+          responses:
+            '200':
+              description: List of services
+              content:
+                application/json:
+                  schema:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Service'
+            '404':
+              $ref: '#/components/responses/NotFound'
 
+    /services/{serviceid}:
+          parameters:
+            - $ref: '#/components/parameters/ServiceIdParam'
+          get:
+            description: Get service
+            operationId: getService
+            security:
+              - bearerAuth: []
+            responses:
+              '200':
+                description: Service
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/Service'
+              '404':
+                $ref: '#/components/responses/NotFound'
+              '403':
+                $ref: '#/components/responses/NotAuthorized'
+
+          post:
+              description: Create service
+              operationId: createService
+              security:
+                - bearerAuth: []
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/Service'
+              responses:
+                '201':
+                  description: Service created
+                '409':
+                   $ref: '#/components/responses/BadRequest'
+                '403':
+                   $ref: '#/components/responses/NotAuthorized'
+          delete:
+                description: Delete service
+                operationId: deleteService
+                security:
+                  - bearerAuth: []
+                responses:
+                  '200':
+                    description: OK
+                  '404':
+                    $ref: '#/components/responses/NotFound'
+                  '403':
+                    $ref: '#/components/responses/NotAuthorized'
+
+    /staff/{staffid}/appointment:
+        get:
+          description: Get staff appointments
+          operationId: getStaffAppointments
+          security:
+            - bearerAuth: []
+          responses:
+            '200':
+              description: List of staff appointments
+              content:
+                application/json:
+                  schema:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Appointment'
+            '404':
+              $ref: '#/components/responses/NotFound'
+            '403':
+              $ref: '#/components/responses/NotAuthorized'
 
   
-    
+    /staff/{staffid}/appointment/{appointmentid}:
+            patch:
+              description: change appointment status
+              operationId: updateAppointmentStatus
+              security:
+                - bearerAuth: []
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      properties:
+                        status:
+                          type: string
+                          enum: 
+                            - pending
+                            - completed
+                            - paid
+              responses:
+                '200':
+                  description: OK
+                '404':
+                  $ref: '#/components/responses/NotFound'
+                '403':
+                  $ref: '#/components/responses/NotAuthorized'
+              
 
-            
+      
+
+        
 components:
   securitySchemes:
     bearerAuth:
@@ -407,6 +627,14 @@ components:
 
      AppointmentIdParam:
         name: appointmentId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+
+     ServiceIdParam:
+        name: serviceId
         in: path
         required: true
         schema:
@@ -511,4 +739,23 @@ components:
              - paid
              - completed
              - rejected
+    
+    Service:
+       type: object
+       properties:
+         id:
+           type: string
+         name:
+           type: string
+         price:
+           type: number
+         description:
+           type: string
+           nullable: true
+         duration:
+           type: string
+           nullable: true
+       required:
+         - name
+         - price
     
