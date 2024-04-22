@@ -603,7 +603,7 @@ paths:
                                         type: string
                                     priviledges:
                                         type: array
-    /admin/{customerId}:
+    /user/{customerId}:
         parameters:
             - $ref: "#component/parameter/UserIdParam"
         get:
