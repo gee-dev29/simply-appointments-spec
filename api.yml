@@ -1,512 +1,495 @@
 openapi: 3.0.2
 info:
-  title: API for Simply Appointments
-  description: An Appointment Management System
-  version: 1.0.0
+    title: API for Simply Appointments
+    description: An Appointment Management System
+    version: 1.0.0
 servers:
-  - url: http://api.simplyappointments.com/v1
-  
+    - url: http://api.simplyappointments.com/v1
+
 paths:
     /users/login:
-       post:
-        description: Login user
-        operationId: loginUser
-        requestBody:
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  email:
-                    type: string
-                  password:
-                    type: string
-        responses:
-          '200':
-            description: Login successful
-            headers:
-              X-Authorization:
-                schema:
-                  type: string
-          '404':
-            $ref: '#/components/responses/NotFound'
+        post:
+            description: Login user
+            operationId: loginUser
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                email:
+                                    type: string
+                                password:
+                                    type: string
+            responses:
+                "200":
+                    description: Login successful
+                    headers:
+                        X-Authorization:
+                            schema:
+                                type: string
+                "404":
+                    $ref: "#/components/responses/NotFound"
 
     /users/otp:
-       patch:
-        description: create a one time password for user
-        operationId: createOTP
-        requestBody:
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  email:
-                    type: string
-                    format: email
-        responses:
-          '200':
-            description: OK
-          '404':
-            $ref: '#/components/responses/NotFound'
+        patch:
+            description: create a one time password for user
+            operationId: createOTP
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                email:
+                                    type: string
+                                    format: email
+            responses:
+                "200":
+                    description: OK
+                "404":
+                    $ref: "#/components/responses/NotFound"
 
     /users/validate-otp:
         post:
-          description: validate one time password for user
-          operationId: validateOTP
-          requestBody:
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    email:
-                      type: string
-                      format: email
-                    otp:
-                      type: string
-          responses:
-            '200':
-              description: OK
-              headers:
-                X-Authorization:
-                  schema:
-                    type: string
-            '404':
-              $ref: '#/components/responses/NotFound'
+            description: validate one time password for user
+            operationId: validateOTP
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                email:
+                                    type: string
+                                    format: email
+                                otp:
+                                    type: string
+            responses:
+                "200":
+                    description: OK
+                    headers:
+                        X-Authorization:
+                            schema:
+                                type: string
+                "404":
+                    $ref: "#/components/responses/NotFound"
 
     /user/customer:
-         post:
-           description: Register a new customer
-           operationId: registerCustomer
-           requestBody:
-               content:
-                  application/json:
-                     schema:
-                       $ref: '#/components/schemas/User'
-           responses:
-             '201':
-               description: customer resgistered successfully
-             '400':
-                $ref: '#/components/responses/BadRequest'
-             '409' : 
-                $ref: '#/components/responses/Conflict'
-         get: 
-              description: Get list of customers
-              operationId: getCustomers
-              security:
-                - bearerAuth: []
-              responses:
-                '200':
-                  description: List of customers
-                  content:
+        post:
+            description: Register a new customer
+            operationId: registerCustomer
+            requestBody:
+                content:
                     application/json:
-                      schema:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/User'
-                '404':
-                  $ref: '#/components/responses/NotFound'
-                '403':
-                  $ref: '#/components/responses/NotAuthorized'
+                        schema:
+                            $ref: "#/components/schemas/User"
+            responses:
+                "201":
+                    description: customer resgistered successfully
+                "400":
+                    $ref: "#/components/responses/BadRequest"
+                "409":
+                    $ref: "#/components/responses/Conflict"
+        get:
+            description: Get list of customers
+            operationId: getCustomers
+            security:
+                - bearerAuth: []
+            responses:
+                "200":
+                    description: List of customers
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/User"
+                "404":
+                    $ref: "#/components/responses/NotFound"
+                "403":
+                    $ref: "#/components/responses/NotAuthorized"
 
     /user/staff:
-         post:
-           description: Register a new staff
-           operationId: registerStaff
-           requestBody:
-               content:
-                  application/json:
-                     schema:
-                       $ref: '#/components/schemas/User'
-           responses:
-             '201':
-               description: staff resgistered successfully
-             '400':
-                $ref: '#/components/responses/BadRequest'
-             '409' : 
-                $ref: '#/components/responses/Conflict'
-         get:
-              description: Get list of staffs
-              operationId: getStaffs
-              security:
-                - bearerAuth: []
-              responses:
-                '200':
-                  description: List of staffs
-                  content:
+        post:
+            description: Register a new staff
+            operationId: registerStaff
+            requestBody:
+                content:
                     application/json:
-                      schema:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/User'
-                '404':
-                  $ref: '#/components/responses/NotFound'
-                '403':
-                  $ref: '#/components/responses/NotAuthorized'
-
-    /users/admin:
-         post:
-           description: Register a new admin
-           operationId: registerAdmin
-           requestBody:
-               content:
-                  application/json:
-                     schema:
-                       $ref: '#/components/schemas/User'
-           responses:
-             '201':
-               description: admin resgistered successfully
-             '400':
-                $ref: '#/components/responses/BadRequest'
-             '409' : 
-                $ref: '#/components/responses/Conflict'
+                        schema:
+                            $ref: "#/components/schemas/User"
+            responses:
+                "201":
+                    description: staff resgistered successfully
+                "400":
+                    $ref: "#/components/responses/BadRequest"
+                "409":
+                    $ref: "#/components/responses/Conflict"
+        get:
+            description: Get list of staffs
+            operationId: getStaffs
+            security:
+                - bearerAuth: []
+            responses:
+                "200":
+                    description: List of staffs
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/User"
+                "404":
+                    $ref: "#/components/responses/NotFound"
+                "403":
+                    $ref: "#/components/responses/NotAuthorized"
 
     /users/{userId}:
-          parameters:
-            - $ref: '#/components/parameters/UserIdParam'
-          get:
+        parameters:
+            - $ref: "#/components/parameters/UserIdParam"
+        get:
             description: Get user
             operationId: getUser
             security:
-              - bearerAuth: []
+                - bearerAuth: []
             responses:
-              '200':
-                description: User
-                content:
-                  application/json:
-                    schema:
-                      $ref: '#/components/schemas/User'
-              '404':
-                $ref: '#/components/responses/NotFound'
-              '403':
-                $ref: '#/components/responses/NotAuthorized'
-              '409' : 
-                $ref: '#/components/responses/Conflict'
-          patch:
+                "200":
+                    description: User
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/User"
+                "404":
+                    $ref: "#/components/responses/NotFound"
+                "403":
+                    $ref: "#/components/responses/NotAuthorized"
+                "409":
+                    $ref: "#/components/responses/Conflict"
+        patch:
             description: Update user
             operationId: updateUser
             security:
-              - bearerAuth: []
+                - bearerAuth: []
             requestBody:
-              content:
-                application/json:
-                  schema:
-                    $ref: '#/components/schemas/User'
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/User"
             responses:
-              '200':
-                description: OK
-              '404':
-                $ref: '#/components/responses/NotFound'
-              '403':
-                $ref: '#/components/responses/NotAuthorized'
-              '409' : 
-                $ref: '#/components/responses/Conflict'
-          delete:
+                "200":
+                    description: OK
+                "404":
+                    $ref: "#/components/responses/NotFound"
+                "403":
+                    $ref: "#/components/responses/NotAuthorized"
+                "409":
+                    $ref: "#/components/responses/Conflict"
+        delete:
             description: Delete user
             operationId: deleteUser
             security:
-              - bearerAuth: []
+                - bearerAuth: []
             responses:
-              '200':
-                description: OK
-              '404':
-                $ref: '#/components/responses/NotFound'
-              '403':
-                $ref: '#/components/responses/NotAuthorized'
-              '409' : 
-                $ref: '#/components/responses/Conflict'
+                "200":
+                    description: OK
+                "404":
+                    $ref: "#/components/responses/NotFound"
+                "403":
+                    $ref: "#/components/responses/NotAuthorized"
+                "409":
+                    $ref: "#/components/responses/Conflict"
 
     /users/{userId}/change-password:
-          parameters:
-             - $ref: '#/components/parameters/UserIdParam'
-          patch:
+        parameters:
+            - $ref: "#/components/parameters/UserIdParam"
+        patch:
             description: Change user password
             operationId: changeUserPassword
             security:
-              - bearerAuth: []
+                - bearerAuth: []
             requestBody:
-              content:
-                application/json:
-                  schema:
-                    type: object
-                    properties:
-                      password:
-                        type: string
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                password:
+                                    type: string
             responses:
-              '200':
-                description: OK
-              '404':
-                $ref: '#/components/responses/NotFound'
-              '403':
-                $ref: '#/components/responses/NotAuthorized'
-              '409' : 
-                $ref: '#/components/responses/Conflict'
+                "200":
+                    description: OK
+                "404":
+                    $ref: "#/components/responses/NotFound"
+                "403":
+                    $ref: "#/components/responses/NotAuthorized"
+                "409":
+                    $ref: "#/components/responses/Conflict"
 
     /users/{userId}/appointment/{appointmentId}:
-          parameters:
-             - $ref: '#/components/parameters/UserIdParam'
-             - $ref: '#/components/parameters/AppointmentIdParam'
-          post:
+        parameters:
+            - $ref: "#/components/parameters/UserIdParam"
+            - $ref: "#/components/parameters/AppointmentIdParam"
+        post:
             description: Book appointment
             operationId: bookAppointment
             security:
-              - bearerAuth: []
-            requestBody:
-              content:
-                application/json:
-                  schema:
-                    $ref: '#/components/schemas/Appointment'
-            responses:
-              '201':
-                description: OK
-              '404':
-                $ref: '#/components/responses/NotFound'
-              '403':
-                $ref: '#/components/responses/NotAuthorized'
-              '409' : 
-                $ref: '#/components/responses/Conflict'
-          get:
-              description: Get user Appointment
-              operationId: getUserAppointment
-              security:
                 - bearerAuth: []
-              responses:
-                '200':
-                  description: OK
-                  content:
+            requestBody:
+                content:
                     application/json:
-                      schema:
-                        $ref: '#/components/schemas/Appointment'
-                '404':
-                  $ref: '#/components/responses/NotFound'
-                '403':
-                  $ref: '#/components/responses/NotAuthorized'
-                '409' : 
-                  $ref: '#/components/responses/Conflict'
-          patch:
+                        schema:
+                            $ref: "#/components/schemas/Appointment"
+            responses:
+                "201":
+                    description: OK
+                "404":
+                    $ref: "#/components/responses/NotFound"
+                "403":
+                    $ref: "#/components/responses/NotAuthorized"
+                "409":
+                    $ref: "#/components/responses/Conflict"
+        get:
+            description: Get user Appointment
+            operationId: getUserAppointment
+            security:
+                - bearerAuth: []
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Appointment"
+                "404":
+                    $ref: "#/components/responses/NotFound"
+                "403":
+                    $ref: "#/components/responses/NotAuthorized"
+                "409":
+                    $ref: "#/components/responses/Conflict"
+        patch:
             description: Update user Appointment
             operationId: updateUserAppointment
             security:
-              - bearerAuth: []
+                - bearerAuth: []
             requestBody:
-              content:
-                application/json:
-                  schema:
-                    $ref: '#/components/schemas/Appointment'
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/Appointment"
             responses:
-              '200':
-                description: OK
-              '404':
-                $ref: '#/components/responses/NotFound'
-              '403':
-                $ref: '#/components/responses/NotAuthorized'
-              '409' : 
-                $ref: '#/components/responses/Conflict'
-          delete:
+                "200":
+                    description: OK
+                "404":
+                    $ref: "#/components/responses/NotFound"
+                "403":
+                    $ref: "#/components/responses/NotAuthorized"
+                "409":
+                    $ref: "#/components/responses/Conflict"
+        delete:
             description: Cancel user Appointment
             operationId: cancelUserAppointment
             security:
-              - bearerAuth: []
+                - bearerAuth: []
             responses:
-              '200':
-                description: OK
-              '404':
-                $ref: '#/components/responses/NotFound'
-              '403':
-                $ref: '#/components/responses/NotAuthorized'
-              '409' : 
-                $ref: '#/components/responses/Conflict'
+                "200":
+                    description: OK
+                "404":
+                    $ref: "#/components/responses/NotFound"
+                "403":
+                    $ref: "#/components/responses/NotAuthorized"
+                "409":
+                    $ref: "#/components/responses/Conflict"
 
     /users/{userId}/appointment:
-      get:
-        description: Get user appointments
-        operationId: getUserAppointments
-        security:
-          - bearerAuth: []
-        responses:
-          '200':
-            description: OK
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Appointment'
-          '404':
-            $ref: '#/components/responses/NotFound'
-          '403':
-            $ref: '#/components/responses/NotAuthorized'
+        get:
+            description: Get user appointments
+            operationId: getUserAppointments
+            security:
+                - bearerAuth: []
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/Appointment"
+                "404":
+                    $ref: "#/components/responses/NotFound"
+                "403":
+                    $ref: "#/components/responses/NotAuthorized"
 
     /users/{userId}/appointment/{appointmentId}/reschedule:
         patch:
             description: Reschedule an appointment
             operationId: rescheduleAppointment
             security:
-               - bearerAuth: []
+                - bearerAuth: []
             requestBody:
-              content:
-                application/json:
-                   schema:
-                     type: object
-                     properties:
-                       newDate:
-                         type: string
-                         format: date
-                       newTime:
-                        type: string
-                        format: time
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                newDate:
+                                    type: string
+                                    format: date
+                                newTime:
+                                    type: string
+                                    format: time
             responses:
-              '200':
-                description: OK
-              '404':
-                $ref: '#/components/responses/NotFound'
-              '403':
-                $ref: '#/components/responses/NotAuthorized'
-              '409' : 
-                $ref: '#/components/responses/Conflict'
+                "200":
+                    description: OK
+                "404":
+                    $ref: "#/components/responses/NotFound"
+                "403":
+                    $ref: "#/components/responses/NotAuthorized"
+                "409":
+                    $ref: "#/components/responses/Conflict"
 
     /staffs:
         get:
-          description: Get list of staffs
-          operationId: getStaffs
-          security:
-            - bearerAuth: []
-          responses:
-            '200':
-              description: List of staffs
-              content:
-                application/json:
-                  schema:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/User'
-            '404':
-              $ref: '#/components/responses/NotFound'
-            '403':
-              $ref: '#/components/responses/NotAuthorized'
+            description: Get list of staffs
+            operationId: getStaffs
+            security:
+                - bearerAuth: []
+            responses:
+                "200":
+                    description: List of staffs
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/User"
+                "404":
+                    $ref: "#/components/responses/NotFound"
+                "403":
+                    $ref: "#/components/responses/NotAuthorized"
         post:
             description: Create staff
             operationId: createStaff
             security:
-              - bearerAuth: []
+                - bearerAuth: []
             requestBody:
-              content:
-                application/json:
-                  schema:
-                    $ref: '#/components/schemas/User'
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/User"
             responses:
-              '201':
-                description: OK
-              '404':
-                $ref: '#/components/responses/NotFound'
-              '403':
-                $ref: '#/components/responses/NotAuthorized'
-              '409':
-                $ref: '#/components/responses/Conflict'
-    
+                "201":
+                    description: OK
+                "404":
+                    $ref: "#/components/responses/NotFound"
+                "403":
+                    $ref: "#/components/responses/NotAuthorized"
+                "409":
+                    $ref: "#/components/responses/Conflict"
+
     /appointments:
         parameters:
-         - $ref: '#/components/parameters/SkipParam'
-         - $ref: '#/components/parameters/LimitParam'
-         - $ref: '#/components/parameters/AppointmentStatusParam'
-         - $ref: '#/components/parameters/AppointmentDateParam'
+            - $ref: "#/components/parameters/SkipParam"
+            - $ref: "#/components/parameters/LimitParam"
+            - $ref: "#/components/parameters/AppointmentStatusParam"
+            - $ref: "#/components/parameters/AppointmentDateParam"
         get:
-          description: Get list of appointments
-          responses:
-            '200':
-              description: List of appointments
-              content:
-                application/json:
-                  schema:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Appointment'
-            '404':
-              $ref: '#/components/responses/NotFound'
+            description: Get list of appointments
+            responses:
+                "200":
+                    description: List of appointments
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/Appointment"
+                "404":
+                    $ref: "#/components/responses/NotFound"
 
     /appointments/{appointmentid}:
-          parameters:
-            - $ref: '#/components/parameters/AppointmentIdParam'
-          get:
+        parameters:
+            - $ref: "#/components/parameters/AppointmentIdParam"
+        get:
             description: Get appointment
             operationId: getAppointment
             security:
-              - bearerAuth: []
+                - bearerAuth: []
             responses:
-              '200':
-                description: Appointment
-                content:
-                  application/json:
-                    schema:
-                      $ref: '#/components/schemas/Appointment'
-              '404':
-                $ref: '#/components/responses/NotFound'
-              '403':
-                $ref: '#/components/responses/NotAuthorized'
+                "200":
+                    description: Appointment
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Appointment"
+                "404":
+                    $ref: "#/components/responses/NotFound"
+                "403":
+                    $ref: "#/components/responses/NotAuthorized"
 
     /services:
         get:
-          description: Get list of services
-          operationId: getServices
-          security:
-            - bearerAuth: []
-          responses:
-            '200':
-              description: List of services
-              content:
-                application/json:
-                  schema:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Service'
-            '404':
-              $ref: '#/components/responses/NotFound'
+            description: Get list of services
+            operationId: getServices
+            security:
+                - bearerAuth: []
+            responses:
+                "200":
+                    description: List of services
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/Service"
+                "404":
+                    $ref: "#/components/responses/NotFound"
 
     /services/{serviceid}:
-          parameters:
-            - $ref: '#/components/parameters/ServiceIdParam'
-          get:
+        parameters:
+            - $ref: "#/components/parameters/ServiceIdParam"
+        get:
             description: Get service
             operationId: getService
             security:
-              - bearerAuth: []
-            responses:
-              '200':
-                description: Service
-                content:
-                  application/json:
-                    schema:
-                      $ref: '#/components/schemas/Service'
-              '404':
-                $ref: '#/components/responses/NotFound'
-              '403':
-                $ref: '#/components/responses/NotAuthorized'
-
-          post:
-              description: Create service
-              operationId: createService
-              security:
                 - bearerAuth: []
-              requestBody:
+            responses:
+                "200":
+                    description: Service
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Service"
+                "404":
+                    $ref: "#/components/responses/NotFound"
+                "403":
+                    $ref: "#/components/responses/NotAuthorized"
+
+        post:
+            description: Create service
+            operationId: createService
+            security:
+                - bearerAuth: []
+            requestBody:
                 content:
-                  application/json:
-                    schema:
-                      $ref: '#/components/schemas/Service'
-              responses:
-                '201':
-                  description: Service created
-                '409':
-                   $ref: '#/components/responses/BadRequest'
-                '403':
-                   $ref: '#/components/responses/NotAuthorized'
-          delete:
-                description: Delete service
-                operationId: deleteService
-                security:
-                  - bearerAuth: []
-                responses:
-                  '200':
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/Service"
+            responses:
+                "201":
+                    description: Service created
+                "409":
+                    $ref: "#/components/responses/BadRequest"
+                "403":
+                    $ref: "#/components/responses/NotAuthorized"
+        delete:
+            description: Delete service
+            operationId: deleteService
+            security:
+                - bearerAuth: []
+            responses:
+                "200":
                     description: OK
                   '404':
                     $ref: '#/components/responses/NotFound'
@@ -548,230 +531,328 @@ paths:
             '404':
               $ref: '#/components/responses/NotFound'
             '403':
-              $ref: '#/components/responses/NotAuthorized'
-                
+              $ref: '#/components/responses/NotAuthorized
     /staff/{staffid}/appointment/{appointmentid}:
-            patch:
-              description: change appointment status
-              operationId: updateAppointmentStatus
-              security:
+        patch:
+            description: change appointment status
+            operationId: updateAppointmentStatus
+            security:
                 - bearerAuth: []
-              requestBody:
+            requestBody:
                 content:
-                  application/json:
-                    schema:
-                      type: object
-                      properties:
-                        status:
-                          type: string
-                          enum: 
-                            - pending
-                            - completed
-                            - paid
-              responses:
-                '200':
-                  description: OK
-                '404':
-                  $ref: '#/components/responses/NotFound'
-                '403':
-                  $ref: '#/components/responses/NotAuthorized'
-              
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                status:
+                                    type: string
+                                    enum:
+                                        - pending
+                                        - completed
+                                        - paid
+            responses:
+                "200":
+                    description: OK
+                "404":
+                    $ref: "#/components/responses/NotFound"
+                "403":
+                    $ref: "#/components/responses/NotAuthorized"
 
-      
+    /users/admin:
+        post:
+            description: Register a new admin
+            operationId: registerAdmin
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/User"
+            responses:
+                "201":
+                    description: admin resgistered successfully
+                "400":
+                    $ref: "#/components/responses/BadRequest"
+                "409":
+                    $ref: "#/components/responses/Conflict"
 
-        
+    /role/{roleId}:
+        parameters:
+            - $ref: "#components/parameter/RoleIdParam"
+        post:
+            description: Create Role
+            operationId: createRole
+            security:
+                - bearerAuth: []
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                roleName:
+                                    type: string
+                                priviledges:
+                                    type: array
+            responses:
+                "201":
+                    description: "ok"
+                "401":
+                    $ref: "#/components/responses/NotAuthenticated"
+                "403":
+                    $ref: "#/components/responses/NotAuthorized"
+                "409":
+                    $ref: "#/components/responses/Conflict"
+        get:
+            description: Get Role
+            operationId: getRole
+            security:
+                - bearerAuth: []
+            responses:
+                "200":
+                    description: "ok"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    roleName:
+                                        type: string
+                                    priviledges:
+                                        type: array
+    /user/{customerId}:
+        parameters:
+            - $ref: "#component/parameter/UserIdParam"
+        get:
+            description: Get single customer
+            operationId: getCustomer
+            security:
+                - bearerAuth: []
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#components/schema/User"
+            responses:
+                "200":
+                    description: "ok"
+                "401":
+                    $ref: "#/components/responses/NotAuthenticated"
+                "403":
+                    $ref: "#/components/responses/NotAuthorized"
+                "409":
+                    $ref: "#/components/responses/Conflict"
+
+    /user/appointment:
+        get:
+            description: Get all user appointments
+            operationId: getAllAppointment
+            security:
+                - bearerAuth: []
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/Appointment"
+            parameters:
+                - $ref: "#/components/parameters/SkipParam"
+                - $ref: "#/components/parameters/LimitParam"
+                - $ref: "#/components/parameters/AppointmentStatusParam"
+            responses:
+                "200":
+                    description: "ok"
+                "401":
+                    $ref: "#/components/responses/NotAuthenticated"
+                "403":
+                    $ref: "#/components/responses/NotAuthorized"
+
 components:
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-      
+    securitySchemes:
+        bearerAuth:
+            type: http
+            scheme: bearer
+            bearerFormat: JWT
 
-  responses:
-     BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetail'
+    responses:
+        BadRequest:
+            description: Bad request
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/ProblemDetail"
 
-     NotAuthorized:
-      description: Access token can't access the resource
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetail'
+        NotAuthorized:
+            description: Access token can't access the resource
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/ProblemDetail"
 
-     NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetail'
+        NotFound:
+            description: Resource not found
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/ProblemDetail"
 
-     Conflict:
-      description: The specified resource has as a conflict
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetail'
+        Conflict:
+            description: The specified resource has as a conflict
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/ProblemDetail"
 
-     RateLimited:
-        description: The resource is rate limited
-        content:
-          application/json:
+        RateLimited:
+            description: The resource is rate limited
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/ProblemDetail"
+
+        NotAuthenticated:
+            description: access token is missing or invalid
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/ProblemDetail"
+
+    parameters:
+        UserIdParam:
+            name: userId
+            in: path
+            required: true
             schema:
-              $ref: '#/components/schemas/ProblemDetail'
+                type: string
+                format: uuid
 
-     NotAuthenticated:
-        description: access token is missing or invalid
-        content:
-          application/json:
+        AppointmentIdParam:
+            name: appointmentId
+            in: path
+            required: true
             schema:
-              $ref: '#/components/schemas/ProblemDetail'
+                type: string
+                format: uuid
 
+        ServiceIdParam:
+            name: serviceId
+            in: path
+            required: true
+            schema:
+                type: string
+                format: uuid
 
-  parameters:
-     UserIdParam:
-      name: userId
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
+        SkipParam:
+            name: skip
+            in: query
+            description: The number of items to skip
+            schema:
+                type: number
 
-     AppointmentIdParam:
-        name: appointmentId
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
+        LimitParam:
+            name: limit
+            in: query
+            description: The number of items to return
+            schema:
+                type: number
 
-     ServiceIdParam:
-        name: serviceId
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-          
-     SkipParam:
-        name: skip
-        in: query
-        description: The number of items to skip
-        schema:
-          type: number
+        AppointmentStatusParam:
+            name: status
+            in: query
+            schema:
+                type: string
+                enum:
+                    - pending
+                    - confirmed
+                    - cancelled
+                    - paid
+                    - completed
+                    - rejected
 
-     LimitParam:
-        name: limit
-        in: query
-        description: The number of items to return
-        schema:
-          type: number
+        AppointmentDateParam:
+            name: date
+            in: query
+            schema:
+                type: string
+                format: date
 
-     AppointmentStatusParam:
-        name: status
-        in: query
-        schema:
-          type: string
-          enum:
-            - pending
-            - confirmed
-            - cancelled
-            - paid
-            - completed
-            - rejected
+    schemas:
+        ProblemDetail:
+            type: object
+            properties:
+                type:
+                    type: string
+                title:
+                    type: string
+                status:
+                    type: number
+                detail:
+                    type: string
 
-     AppointmentDateParam:
-        name: date
-        in: query
-        schema:
-          type: string
-          format: date
+        User:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+                email:
+                    type: string
+                password:
+                    type: string
+                phoneNumber:
+                    type: number
+                address:
+                    type: string
+                userType:
+                    type: string
+                    enum:
+                        - customer
+                        - staff
+                        - admin
+            required:
+                - name
+                - email
+                - password
 
+        Appointment:
+            type: object
+            properties:
+                id:
+                    type: string
+                userId:
+                    type: string
+                time:
+                    type: string
+                date:
+                    type: string
+                staffId:
+                    type: string
+                serviceId:
+                    type: string
+                status:
+                    type: string
+                    enum:
+                        - pending
+                        - confirmed
+                        - cancelled
+                        - paid
+                        - completed
+                        - rejected
 
-  schemas:
-    ProblemDetail:
-      type: object
-      properties:
-        type:
-          type: string
-        title:
-          type: string
-        status:
-          type: number
-        detail:
-          type: string
-      
-    User:
-      type: object
-      properties:
-        id:
-          type: string 
-        name:
-          type: string
-        email:
-          type: string
-        password:
-          type: string
-        phoneNumber:
-          type: number
-        address:
-          type: string
-        userType:
-          type: string
-          enum:
-            - customer
-            - staff
-            - admin
-      required:
-        - name
-        - email
-        - password
-
-    Appointment:
-       type: object
-       properties:
-         id:
-           type: string
-         userId:
-           type: string
-         time:
-           type: string
-         date:
-           type: string
-         staffId:
-           type: string
-         serviceId:
-           type: string
-         status:
-           type: string
-           enum:
-             - pending
-             - confirmed
-             - cancelled
-             - paid
-             - completed
-             - rejected
-    
-    Service:
-       type: object
-       properties:
-         id:
-           type: string
-         name:
-           type: string
-         price:
-           type: number
-         description:
-           type: string
-           nullable: true
-         duration:
-           type: string
-           nullable: true
-       required:
-         - name
-         - price
-    
+        Service:
+            type: object
+            properties:
+                serviceId:
+                    type: string
+                name:
+                    type: string
+                price:
+                    type: number
+                description:
+                    type: string
+                    nullable: true
+                duration:
+                    type: string
+                    nullable: true
+            required:
+                - name
+                - price
