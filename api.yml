@@ -31,6 +31,61 @@ paths:
         "404":
           $ref: "#/components/responses/NotFound"
 
+  /users/logout:
+    post:
+      description: Logout user
+      operationId: logoutUser
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Logout successful
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /users/forgot-password:
+    post:
+      description: Forgot password
+      operationId: forgotPassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+      responses:
+        "200":
+          description: OK
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+
+  /users/reset-password:
+    post:
+      description: Reset password
+      operationId: resetPassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: OK
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+
   /users/otp:
     patch:
       description: create a one time password for user
@@ -654,6 +709,45 @@ paths:
         "403":
           $ref: "#/components/responses/NotAuthorized"
 
+  /notification:
+     post:
+       description: Send notification
+       operationId: sendNotification
+       security:
+         - bearerAuth: []
+       requestBody:
+         content:
+           application/json:
+             schema:
+               $ref: "#/components/schemas/Notification"
+       responses:
+         "200":
+           description: OK
+         "404":
+           $ref: "#/components/responses/NotFound"
+         "403":
+           $ref: "#/components/responses/NotAuthorized"
+         "409":
+           $ref: "#/components/responses/Conflict"
+     get:
+         description: Get notifications
+         operationId: getNotifications
+         security:
+           - bearerAuth: []
+         responses:
+           "200":
+             description: OK
+             content:
+               application/json:
+                 schema:
+                   type: array
+                   items:
+                     $ref: "#/components/schemas/Notification"
+           "404":
+             $ref: "#/components/responses/NotFound"
+           "403":
+             $ref: "#/components/responses/NotAuthorized"
+       
 components:
   securitySchemes:
     bearerAuth:
@@ -863,3 +957,24 @@ components:
           type: string
           required:
             - name
+
+    Notification:
+      type: object
+      properties:
+        id:
+          type: string
+        appointmentId:
+          type: string
+        email:
+          type: string
+        sentTime:
+          type: string
+        notificationType:
+          type: string
+          enum:
+            - reminder
+            - confirmation
+            - cancellation
+            - Reschedulement
+            - Assignment
+        
