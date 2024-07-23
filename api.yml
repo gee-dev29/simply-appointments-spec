@@ -426,6 +426,26 @@ paths:
                     $ref: "#/components/responses/Conflict"
 
     /appointments:
+        post:
+            description: Create appointment
+            operationId: createAppointment
+            security:
+                - bearerAuth: []
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/Appointment"
+            responses:
+                "201":
+                    description: OK
+                "404":
+                    $ref: "#/components/responses/NotFound"
+                "403":
+                    $ref: "#/components/responses/NotAuthorized"
+                "409":
+                    $ref: "#/components/responses/Conflict"
+
         parameters:
             - $ref: "#/components/parameters/SkipParam"
             - $ref: "#/components/parameters/LimitParam"
@@ -433,6 +453,7 @@ paths:
             - $ref: "#/components/parameters/AppointmentDateParam"
         get:
             description: Get list of appointments
+            operationId: getAppointments
             responses:
                 "200":
                     description: List of appointments
@@ -988,7 +1009,7 @@ components:
         Service:
             type: object
             properties:
-                serviceId:
+                id:
                     type: string
                 serviceName:
                     type: string
@@ -1004,6 +1025,8 @@ components:
                         - name
                         - price
                 isAtive:
+                    type: boolean
+                availabilty:
                     type: boolean
 
         Role:
