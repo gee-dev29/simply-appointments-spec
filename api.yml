@@ -621,6 +621,19 @@ paths:
             $ref: "#/components/responses/NotFound"
           "403":
             $ref: "#/components/responses/NotAuthorized"
+
+     delete:
+        description: Remove service from user
+        operationId: removeService
+        security:
+          - bearerAuth: []
+        responses:
+          "200":
+            description: OK
+          "404":
+            $ref: "#/components/responses/NotFound"
+          "403":
+            $ref: "#/components/responses/NotAuthorized"
             
   /users/{userid}/service:
     get:
@@ -834,61 +847,7 @@ paths:
         "403":
           $ref: "#/components/responses/NotAuthorized"
 
-  /users/{userId}/add-service/{serviceId}:
-    parameters:
-      - $ref: "#/components/parameters/UserIdParam"
-      - $ref: "#/components/parameters/ServiceIdParam"
-    patch:
-      description: Add Service To User
-      operationId: addServiceToUser
-      security:
-        - bearerAuth: []
-      responses:
-        "200":
-          description: OK
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "403":
-          $ref: "#/components/responses/NotAuthorized"
-
-  /users/{userId}/remove-service/{serviceId}:
-    parameters:
-      - $ref: "#/components/parameters/UserIdParam"
-      - $ref: "#/components/parameters/ServiceIdParam"
-    delete:
-      description: Remove Service From User
-      operationId: removeServiceFromUser
-      security:
-        - bearerAuth: []
-      responses:
-        "200":
-          description: OK
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "403":
-          $ref: "#/components/responses/NotAuthorized"
-
-  /users/{userId}/services:
-    parameters:
-      - $ref: "#/components/parameters/UserIdParam"
-    get:
-      description: Get User Services
-      operationId: getUserServices
-      security:
-        - bearerAuth: []
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Service"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "403":
-          $ref: "#/components/responses/NotAuthorized"
+ 
 
 components:
   securitySchemes:
