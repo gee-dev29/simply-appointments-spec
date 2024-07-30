@@ -426,45 +426,45 @@ paths:
                     $ref: "#/components/responses/Conflict"
 
     /appointments:
-        post:
-            description: Create appointment
-            operationId: createAppointment
-            security:
-                - bearerAuth: []
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: "#/components/schemas/Appointment"
-            responses:
-                "201":
-                    description: OK
-                "404":
-                    $ref: "#/components/responses/NotFound"
-                "403":
-                    $ref: "#/components/responses/NotAuthorized"
-                "409":
-                    $ref: "#/components/responses/Conflict"
-
         parameters:
             - $ref: "#/components/parameters/SkipParam"
             - $ref: "#/components/parameters/LimitParam"
             - $ref: "#/components/parameters/AppointmentStatusParam"
             - $ref: "#/components/parameters/AppointmentDateParam"
-        get:
-            description: Get list of appointments
-            operationId: getAppointments
-            responses:
-                "200":
-                    description: List of appointments
-                    content:
-                        application/json:
-                            schema:
-                                type: array
-                                items:
-                                    $ref: "#/components/schemas/Appointment"
-                "404":
-                    $ref: "#/components/responses/NotFound"
+              post:
+                  description: Create appointment
+                  operationId: createAppointment
+                  security:
+                      - bearerAuth: []
+                  requestBody:
+                      content:
+                          application/json:
+                              schema:
+                                  $ref: "#/components/schemas/Appointment"
+                  responses:
+                      "201":
+                          description: OK
+                      "404":
+                          $ref: "#/components/responses/NotFound"
+                      "403":
+                          $ref: "#/components/responses/NotAuthorized"
+                      "409":
+                          $ref: "#/components/responses/Conflict"
+
+              get:
+                  description: Get list of appointments
+                  operationId: getAppointments
+                  responses:
+                      "200":
+                      description: List of appointments
+                  content:
+                      application/json:
+                      schema:
+                          type: array
+                          items:
+                          $ref: "#/components/schemas/Appointment"
+                  "404":
+                  $ref: "#/components/responses/NotFound"
 
     /appointments/{appointmentid}:
         parameters:
@@ -612,6 +612,75 @@ paths:
                 "403":
                     $ref: "#/components/responses/NotAuthorized"
 
+    /users/{userid}/service/{serviceid}:
+        post:
+            description: Add service to user
+            operationId: addServiceToUser
+            security:
+                - bearerAuth: []
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/UserService"
+            responses:
+                "200":
+                    description: OK
+                "404":
+                    $ref: "#/components/responses/NotFound"
+                "403":
+                    $ref: "#/components/responses/NotAuthorized"
+
+        get:
+            description: Get user service
+            operationId: getUserService
+            security:
+                - bearerAuth: []
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Service"
+                "404":
+                    $ref: "#/components/responses/NotFound"
+                "403":
+                    $ref: "#/components/responses/NotAuthorized"
+
+        delete:
+            description: Remove service from user
+            operationId: removeService
+            security:
+                - bearerAuth: []
+            responses:
+                "200":
+                    description: OK
+                "404":
+                    $ref: "#/components/responses/NotFound"
+                "403":
+                    $ref: "#/components/responses/NotAuthorized"
+
+    /users/{userid}/service:
+        get:
+            description: Get user services
+            operationId: getUserServices
+            security:
+                - bearerAuth: []
+            responses:
+                "200":
+                    description: List of user services
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/Service"
+                "404":
+                    $ref: "#/components/responses/NotFound"
+                "403":
+                    $ref: "#/components/responses/NotAuthorized"
+
     /staff/{staffid}/appointment:
         get:
             description: Get staff appointments
@@ -730,6 +799,41 @@ paths:
                 "403":
                     $ref: "#/components/responses/NotAuthorized"
 
+    /users/{userid}/role/{roleid}:
+        patch:
+            description: Update user role
+            operationId: updateUserRole
+            security:
+                - bearerAuth: []
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/User"
+            responses:
+                "200":
+                    description: OK
+                "404":
+                    $ref: "#/components/responses/NotFound"
+                "403":
+                    $ref: "#/components/responses/NotAuthorized"
+        get:
+            description: Get user role
+            operationId: getUserRole
+            security:
+                - bearerAuth: []
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/User"
+                "404":
+                    $ref: "#/components/responses/NotFound"
+                "403":
+                    $ref: "#/components/responses/NotAuthorized"
+
     /notification:
         post:
             description: Send notification
@@ -764,62 +868,6 @@ paths:
                                 type: array
                                 items:
                                     $ref: "#/components/schemas/Notification"
-                "404":
-                    $ref: "#/components/responses/NotFound"
-                "403":
-                    $ref: "#/components/responses/NotAuthorized"
-
-    /users/{userId}/add-service/{serviceId}:
-        parameters:
-            - $ref: "#/components/parameters/UserIdParam"
-            - $ref: "#/components/parameters/ServiceIdParam"
-        patch:
-            description: Add Service To User
-            operationId: addServiceToUser
-            security:
-                - bearerAuth: []
-            responses:
-                "200":
-                    description: OK
-                "404":
-                    $ref: "#/components/responses/NotFound"
-                "403":
-                    $ref: "#/components/responses/NotAuthorized"
-
-    /users/{userId}/remove-service/{serviceId}:
-        parameters:
-            - $ref: "#/components/parameters/UserIdParam"
-            - $ref: "#/components/parameters/ServiceIdParam"
-        delete:
-            description: Remove Service From User
-            operationId: removeServiceFromUser
-            security:
-                - bearerAuth: []
-            responses:
-                "200":
-                    description: OK
-                "404":
-                    $ref: "#/components/responses/NotFound"
-                "403":
-                    $ref: "#/components/responses/NotAuthorized"
-
-    /users/{userId}/services:
-        parameters:
-            - $ref: "#/components/parameters/UserIdParam"
-        get:
-            description: Get User Services
-            operationId: getUserServices
-            security:
-                - bearerAuth: []
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                type: array
-                                items:
-                                    $ref: "#/components/schemas/Service"
                 "404":
                     $ref: "#/components/responses/NotFound"
                 "403":
@@ -1009,7 +1057,7 @@ components:
         Service:
             type: object
             properties:
-                id:
+                serviceId:
                     type: string
                 serviceName:
                     type: string
@@ -1025,8 +1073,6 @@ components:
                         - name
                         - price
                 isAtive:
-                    type: boolean
-                availabilty:
                     type: boolean
 
         Role:
@@ -1058,3 +1104,11 @@ components:
                         - cancellation
                         - Reschedulement
                         - Assignment
+
+        UserService:
+            type: object
+            properties:
+                userId:
+                    type: string
+                serviceId:
+                    type: string
